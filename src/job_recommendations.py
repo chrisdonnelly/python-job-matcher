@@ -34,9 +34,9 @@ def get_job_location_score(member: ProcessedMember, job: JobListing) -> int:
 
     if (
         LocationModifier.OUTSIDE in member.location_modifiers
-        and job.location in member.locations
+        and job.location not in member.locations
     ):
-        location_score -= 1
+        location_score += 1
         return location_score
 
     if job.location in member.locations:
