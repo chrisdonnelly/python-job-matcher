@@ -22,8 +22,9 @@ def main():
         members=processed_members, jobs=processed_jobs
     )
 
-    pp = pprint.PrettyPrinter(indent=12)
-    pp.pprint(job_recommendations)
+    pp = pprint.PrettyPrinter(indent=6)
+    for job in job_recommendations:
+        pp.pprint(job)
     print(
         f"{len(job_recommendations)} job recommendations created in {int(time.monotonic() - start_time)}s."
     )

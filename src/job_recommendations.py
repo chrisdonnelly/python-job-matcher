@@ -26,7 +26,9 @@ def get_job_score(member: ProcessedMember, job: JobListing) -> JobRecommendation
 
     total_score = location_score + job_match_score
 
-    return JobRecommendation(title=job.title, location=job.location, score=total_score)
+    return JobRecommendation(
+        title=job.title, location=job.location.value, score=total_score
+    )
 
 
 def get_job_location_score(member: ProcessedMember, job: JobListing) -> int:
