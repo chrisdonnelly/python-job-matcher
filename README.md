@@ -62,3 +62,5 @@ meaningful way, preferably using some shared values our BE application understan
 
 * Therefore, our member Daisy's recommendations include a job in her current location despite her looking to relocate.
 
+* A note on testing - ideally we should unit test our functions using pytest or a similar testing tool.  Unit tests would
+help us iterate towards a more comprehensive and performative solution. 
