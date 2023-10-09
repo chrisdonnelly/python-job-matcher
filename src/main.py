@@ -4,9 +4,11 @@ import pprint
 from process_jobs_data import raw_jobs_to_processed_job_listings
 from process_members_data import raw_members_to_processed_members
 from job_recommendations import get_recommended_jobs
+import time
 
 
 def main():
+    start_time = time.monotonic()
     jobs_url = os.environ.get("JOBS_URL")
     members_url = os.environ.get("MEMBERS_URL")
 
@@ -22,6 +24,9 @@ def main():
 
     pp = pprint.PrettyPrinter(indent=12)
     pp.pprint(job_recommendations)
+    print(
+        f"{len(job_recommendations)} job recommendations created in {int(time.monotonic() - start_time)}s."
+    )
 
 
 main()
