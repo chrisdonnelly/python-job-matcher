@@ -15,5 +15,7 @@ def raw_jobs_to_processed_job_listings(jobs_data: list) -> list[JobListing]:
 
 
 def get_job_location(location: str) -> Location:
-    string_to_parse = location.upper()
-    return Location[string_to_parse]
+    for loc in Location:
+        if loc.value.upper() == location.upper():
+            return loc
+    raise ValueError(f"Invalid location: {location}")

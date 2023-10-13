@@ -3,7 +3,7 @@ import os
 import pprint
 from process_jobs_data import raw_jobs_to_processed_job_listings
 from process_members_data import raw_members_to_processed_members
-from job_recommendations import get_recommended_jobs
+from job_recommendations import get_recommended_jobs_for_members
 import time
 
 
@@ -18,7 +18,7 @@ def main():
     processed_jobs = raw_jobs_to_processed_job_listings(jobs_data=jobs_data)
     processed_members = raw_members_to_processed_members(members_data=members_data)
 
-    job_recommendations = get_recommended_jobs(
+    job_recommendations = get_recommended_jobs_for_members(
         members=processed_members, jobs=processed_jobs
     )
 

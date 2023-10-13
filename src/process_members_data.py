@@ -12,7 +12,7 @@ def raw_members_to_processed_members(members_data: list) -> list[ProcessedMember
 
 
 def normalise_member_biography(member: dict) -> dict:
-    member["bio"] = member["bio"].translate(translator).upper().split()
+    member["bio"] = member["bio"].translate(translator).upper()
     return member
 
 
@@ -26,22 +26,19 @@ def process_raw_members(members_data: list) -> list[ProcessedMember]:
         )
         for member in members_data
     ]
+
     return processed_members
 
 
 def member_locations_to_domain_locations(biography: str) -> list[Location]:
-    location_key_words = []
-    valid_location_key_words = Location.list_values()
-    for word in biography:
-        if word in valid_location_key_words:
-            location_key_words.append(Location[word])
-    return location_key_words
+    parsed_bio_content = biography.upper().split()
+    location_keywords = [loc for loc in Location if loc.value in parsed_bio_content]
+    return location_keywords
 
 
 def parse_location_modifiers(biography: str) -> list[LocationModifier]:
-    location_modifiers = []
-    valid_location_modifiers = LocationModifier.list_values()
-    for word in biography:
-        if word in valid_location_modifiers:
-            location_modifiers.append(LocationModifier[word])
-    return location_modifiers
+    bio_content = biography.split()
+    location_modifier_keywords = [
+        loc for loc in LocationModifier if loc.value in bio_content
+    ]
+    return location_modifier_keywords
