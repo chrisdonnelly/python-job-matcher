@@ -1,11 +1,11 @@
 from enums import JobKeyword
 
 
-def get_job_keywords(string: str) -> list[JobKeyword]:
-    strings_to_parse = string.upper().split()
-    job_key_words = [
-        getattr(JobKeyword, word, None)
-        for word in strings_to_parse
-        if word in JobKeyword.list_values()
-    ]
-    return job_key_words
+def get_job_keywords_from_job_title(job_title: str) -> list[JobKeyword]:
+    strings_to_parse = job_title.upper().split()
+    job_keywords = []
+    valid_keywords = JobKeyword.list_values()
+    for word in strings_to_parse:
+        if word in valid_keywords:
+            job_keywords.append(JobKeyword[word])
+    return job_keywords

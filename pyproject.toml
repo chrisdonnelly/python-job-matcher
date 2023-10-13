@@ -12,6 +12,7 @@ requests = "^2.31.0"
 prettier = "^0.0.7"
 python-dotenv = "^1.0.0"
 poetry-dotenv-plugin = "^0.2.0"
+mypy = "^1.6.0"
 
 
 [build-system]
