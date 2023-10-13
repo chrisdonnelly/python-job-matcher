@@ -6,11 +6,11 @@ def get_recommended_jobs(members: list[ProcessedMember], jobs: list[JobListing])
     job_recommendations = []
     for member in members:
         recommended_jobs = [get_job_score(member=member, job=job) for job in jobs]
-        highest_score = max(job.score for job in recommended_jobs)
+        highest_score = max(job.score for job in recommended_jobs if job)
         recommended_jobs_by_score = [
             job
             for job in recommended_jobs
-            if job.score != 0 and job.score == highest_score
+            if job and (job.score != 0 and job.score) == highest_score
         ]
         job_recommendations.append(
             JobRecommendations(
@@ -27,7 +27,7 @@ def get_job_score(member: ProcessedMember, job: JobListing) -> JobRecommendation
     total_score = location_score + job_match_score
 
     return JobRecommendation(
-        title=job.title, location=job.location.value, score=total_score
+        title=job.title, location=job.location, score=total_score
     )
 
 
