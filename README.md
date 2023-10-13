@@ -23,6 +23,14 @@ $ source .venv/bin/activate
 $ poetry install
 ```
 
+## Tooling
+```bash
+# Format files 
+$ black src
+# Type checking
+$ mypy src
+```
+
 ## Run
 To run the script...
 ```bash
