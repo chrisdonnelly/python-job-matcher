@@ -5,71 +5,62 @@ from enums import LocationModifier
 def get_recommended_jobs_for_members(
     members: list[ProcessedMember], jobs: list[JobListing]
 ):
-    job_recommendations = []
+    recommendations = []
     for member in members:
-        recommended_jobs = [get_total_job_score(member=member, job=job) for job in jobs]
-        recommended_jobs_filtered = filter_job_recommendations_by_score(
-            recommended_jobs
-        )
-        job_recommendations.append(
+        member_recommendations = []
+
+        for job in jobs:
+            # Calculate a score based on job keywords
+            keyword_scores = [
+                1 if member_kw.value in job_kw.value else 0
+                for member_kw in member.job_keywords
+                for job_kw in job.key_words
+            ]
+            keyword_score = sum(keyword_scores)
+
+            # Calculate location score
+            location_score = calculate_location_score(member, job)
+
+            # Combine keyword score and location score
+            total_score = keyword_score + location_score
+
+            # Create a job recommendation
+            if total_score > 0:
+                recommendation = JobRecommendation(
+                    title=job.title, location=job.location, score=total_score
+                )
+                member_recommendations.append(recommendation)
+
+        # Sort recommendations by total score in descending order
+        member_recommendations.sort(key=lambda x: x.score, reverse=True)
+
+        # Find the highest-scoring jobs
+        highest_score = member_recommendations[0].score if member_recommendations else 0
+        highest_scorers = [
+            rec for rec in member_recommendations if rec.score == highest_score
+        ]
+
+        # Limit the number of recommendations, e.g., top 3 highest-scoring jobs
+        highest_scorers = highest_scorers[:3]
+
+        recommendations.append(
             JobRecommendations(
-                member_name=member.name, job_recommendations=recommended_jobs_filtered
+                member_name=member.name, job_recommendations=highest_scorers
             )
         )
-    return job_recommendations
+
+    return recommendations
 
 
-def filter_job_recommendations_by_score(
-    recommended_jobs: list[JobRecommendation | None],
-) -> list[JobRecommendation]:
-    recommended_jobs = [job for job in recommended_jobs if job]
+def calculate_location_score(member, job):
+    if not member.locations:
+        return 0  # No location preference, no location score
 
-    if not recommended_jobs:
-        return []
-
-    highest_score = max(job.score for job in recommended_jobs if job)
-    recommended_jobs_by_score = [
-        job
-        for job in recommended_jobs
-        if job and job.score != 0 and job.score == highest_score
-    ]
-
-    return recommended_jobs_by_score
-
-
-def get_total_job_score(
-    member: ProcessedMember, job: JobListing
-) -> JobRecommendation | None:
-    location_score = get_job_location_score_for_member(member=member, job=job)
-    job_match_score = get_job_keyword_match_score_for_member(member=member, job=job)
-
-    total_score = location_score + job_match_score
-
-    return JobRecommendation(title=job.title, location=job.location, score=total_score)
-
-
-def get_job_location_score_for_member(member: ProcessedMember, job: JobListing) -> int:
-    location_score = 0
-
-    if (
-        LocationModifier.OUTSIDE in member.location_modifiers
-        and job.location not in member.locations
-    ):
-        location_score += 1
-        return location_score
-
-    if job.location in member.locations:
-        location_score += 1
-
-    return location_score
-
-
-def get_job_keyword_match_score_for_member(
-    member: ProcessedMember, job: JobListing
-) -> int:
-    job_match_score = 0
-    for key_word in member.job_keywords:
-        match = [word for word in job.key_words if key_word.value in word.value]
-        if len(match) > 0:
-            job_match_score += len(match)
-    return job_match_score
+    if LocationModifier.OUTSIDE in member.location_modifiers:
+        return (
+            -1 if job.location in member.locations else 0
+        )  # Penalty for locations inside preferred locations
+    else:
+        return (
+            1 if job.location in member.locations else 0
+        )  # Reward for locations inside preferred locations
