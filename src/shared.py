@@ -1,7 +1,7 @@
 from enums import JobTitleKeyword
 
 
-def get_job_key_words_from_string(string: str) -> list[JobTitleKeyword]:
+def get_job_title_key_words_from_string(string: str) -> list[JobTitleKeyword]:
     string_to_upper = string.upper()
     strings_to_parse = string_to_upper.split()
     job_keywords = []

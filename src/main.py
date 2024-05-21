@@ -1,8 +1,8 @@
 from http_client import fetch_json_data
 import os
 import pprint
-from process_jobs_data import raw_jobs_to_processed_job_listings
-from process_members_data import raw_members_to_processed_members
+from process_jobs_data import get_normalised_jobs_from_raw_data
+from process_members_data import get_normalised_members_from_raw_data
 from job_recommendations import get_recommended_jobs_for_members
 import time
 
@@ -12,14 +12,16 @@ def main():
     jobs_url = os.environ.get("JOBS_URL")
     members_url = os.environ.get("MEMBERS_URL")
 
-    jobs_data = fetch_json_data(url=jobs_url)
-    members_data = fetch_json_data(url=members_url)
+    raw_jobs_data = fetch_json_data(url=jobs_url)
+    raw_members_data = fetch_json_data(url=members_url)
 
-    processed_jobs = raw_jobs_to_processed_job_listings(jobs_data=jobs_data)
-    processed_members = raw_members_to_processed_members(members_data=members_data)
+    normalised_jobs = get_normalised_jobs_from_raw_data(jobs_data=raw_jobs_data)
+    normalised_members = get_normalised_members_from_raw_data(
+        members_data=raw_members_data
+    )
 
     job_recommendations = get_recommended_jobs_for_members(
-        members=processed_members, jobs=processed_jobs
+        members=normalised_members, jobs=normalised_jobs
     )
 
     pp = pprint.PrettyPrinter(indent=6)
