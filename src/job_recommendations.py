@@ -13,7 +13,7 @@ def get_recommended_jobs_for_members(members: list[Member], jobs: list[JobListin
             keyword_score = get_job_title_key_words_score(member=member, job=job)
 
             # Calculate location score
-            location_score = get_location_score(member, job)
+            location_score = get_location_score(member=member, job=job)
 
             # Combine keyword score and location score
             total_score = keyword_score + location_score

@@ -15,7 +15,7 @@ def main():
     raw_jobs_data = fetch_json_data(url=jobs_url)
     raw_members_data = fetch_json_data(url=members_url)
 
-    normalised_jobs = get_normalised_jobs_from_raw_data(jobs_data=raw_jobs_data)
+    normalised_jobs = get_normalised_jobs_from_raw_data(raw_jobs_data=raw_jobs_data)
     normalised_members = get_normalised_members_from_raw_data(
         members_data=raw_members_data
     )
