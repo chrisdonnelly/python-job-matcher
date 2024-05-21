@@ -57,15 +57,25 @@ def get_job_title_key_words_score(member: Member, job: JobListing) -> int:
     return keyword_score
 
 
-def get_location_score(member: Member, job: JobListing) -> Literal[0, -1, 1]:
+def get_location_score(member: Member, job: JobListing) -> int:
+    location_score = []
     if not member.locations:
-        return 0  # No location preference, no location score
+        location_score.append(0)  # No location preference, no location score
 
     if LocationModifier.OUTSIDE in member.location_modifiers:
-        return (
-            -1 if job.location in member.locations else 0
-        )  # Penalty for locations inside named location
+        location_score.append(
+            -1
+        ) if job.location in member.locations else location_score.append(0)
+        # Penalty for locations inside named location
+    elif LocationModifier.RELOCATE in member.location_modifiers:
+        if job.location == member.locations[0]:
+            location_score.append(-1)
+        if job.location == member.locations[1]:
+            location_score.append(1)
     else:
-        return (
-            1 if job.location in member.locations else 0
-        )  # Reward for locations inside preferred location
+        location_score.append(
+            1
+        ) if job.location in member.locations else location_score.append(0)
+        # Reward for locations inside preferred location
+
+    return sum(location_score)

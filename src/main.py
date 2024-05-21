@@ -3,7 +3,7 @@ import os
 import pprint
 from process_jobs_data import get_normalised_jobs_from_raw_data
 from process_members_data import get_normalised_members_from_raw_data
-from job_recommendations import get_recommended_jobs_for_members
+from get_job_recommendations import get_recommended_jobs_for_members
 import time
 
 
