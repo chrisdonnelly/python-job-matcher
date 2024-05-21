@@ -1,20 +1,20 @@
 from dataclasses import dataclass
-from enums import Location, JobKeyword, LocationModifier
+from enums import Location, JobTitleKeyword, LocationModifier
 
 
 @dataclass(frozen=True)
 class JobListing:
     title: str
     location: Location
-    key_words: list[JobKeyword]
+    job_title_key_words: list[JobTitleKeyword]
 
 
 @dataclass(frozen=True)
-class ProcessedMember:
+class Member:
     name: str
     locations: list[Location]
     location_modifiers: list[LocationModifier]
-    job_keywords: list[JobKeyword]
+    job_keywords: list[JobTitleKeyword]
 
 
 @dataclass(frozen=True)

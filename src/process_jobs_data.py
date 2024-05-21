@@ -8,7 +8,7 @@ def raw_jobs_to_processed_job_listings(jobs_data: list) -> list[JobListing]:
         JobListing(
             title=job["title"],
             location=get_job_location(job["location"]),
-            key_words=get_job_key_words_from_string(job["title"]),
+            job_title_key_words=get_job_key_words_from_string(job["title"]),
         )
         for job in jobs_data
     ]

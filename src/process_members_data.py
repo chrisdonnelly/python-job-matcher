@@ -1,10 +1,10 @@
-from domain import ProcessedMember
+from domain import Member
 from enums import Location, LocationModifier
 from shared import get_job_key_words_from_string
 from utils import translator
 
 
-def raw_members_to_processed_members(members_data: list) -> list[ProcessedMember]:
+def raw_members_to_processed_members(members_data: list) -> list[Member]:
     members_data = [normalise_member_biography(member) for member in members_data]
     processed_members = process_raw_members(members_data=members_data)
 
@@ -16,9 +16,9 @@ def normalise_member_biography(member: dict) -> dict:
     return member
 
 
-def process_raw_members(members_data: list) -> list[ProcessedMember]:
+def process_raw_members(members_data: list) -> list[Member]:
     processed_members = [
-        ProcessedMember(
+        Member(
             name=member["name"],
             locations=member_locations_to_domain_locations(member["bio"]),
             location_modifiers=parse_location_modifiers(member["bio"]),

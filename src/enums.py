@@ -7,7 +7,7 @@ class ExtendedEnum(enum.Enum):
         return [c.value for c in cls]
 
 
-class JobKeyword(ExtendedEnum):
+class JobTitleKeyword(ExtendedEnum):
     SOFTWARE = "SOFTWARE"
     DEVELOPER = "DEVELOPER"
     MARKETING = "MARKETING"

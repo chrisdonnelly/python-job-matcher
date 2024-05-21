@@ -1,25 +1,19 @@
-from domain import ProcessedMember, JobListing, JobRecommendation, JobRecommendations
+from domain import Member, JobListing, JobRecommendation, JobRecommendations
 from enums import LocationModifier
+from typing import Literal
 
 
-def get_recommended_jobs_for_members(
-    members: list[ProcessedMember], jobs: list[JobListing]
-):
+def get_recommended_jobs_for_members(members: list[Member], jobs: list[JobListing]):
     recommendations = []
     for member in members:
         member_recommendations = []
 
         for job in jobs:
-            # Calculate a score based on job keywords
-            keyword_scores = [
-                1 if member_kw.value in job_kw.value else 0
-                for member_kw in member.job_keywords
-                for job_kw in job.key_words
-            ]
-            keyword_score = sum(keyword_scores)
+            # Calculate score for shared job title key words
+            keyword_score = get_job_title_key_words_score(member=member, job=job)
 
             # Calculate location score
-            location_score = calculate_location_score(member, job)
+            location_score = get_location_score(member, job)
 
             # Combine keyword score and location score
             total_score = keyword_score + location_score
@@ -52,15 +46,26 @@ def get_recommended_jobs_for_members(
     return recommendations
 
 
-def calculate_location_score(member, job):
+def get_job_title_key_words_score(member: Member, job: JobListing) -> int:
+    keyword_scores = [
+        1 if member_kw.value in job_kw.value else 0
+        for member_kw in member.job_keywords
+        for job_kw in job.job_title_key_words
+    ]
+    keyword_score = sum(keyword_scores)
+
+    return keyword_score
+
+
+def get_location_score(member: Member, job: JobListing) -> Literal[0, -1, 1]:
     if not member.locations:
         return 0  # No location preference, no location score
 
     if LocationModifier.OUTSIDE in member.location_modifiers:
         return (
             -1 if job.location in member.locations else 0
-        )  # Penalty for locations inside preferred locations
+        )  # Penalty for locations inside named location
     else:
         return (
             1 if job.location in member.locations else 0
-        )  # Reward for locations inside preferred locations
+        )  # Reward for locations inside preferred location
