@@ -1,6 +1,5 @@
 from domain import Member, JobListing, JobRecommendation, JobRecommendations
 from enums import LocationModifier
-from typing import Literal
 
 
 def get_recommended_jobs_for_members(members: list[Member], jobs: list[JobListing]):
