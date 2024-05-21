@@ -69,13 +69,5 @@ on the values we can extract from our member bios and how those value match agai
 * The current scoring function/algorithm has not been optimised for performance.  We have
 a number of nested of loops that could be extracted and optimised with more time.
 
-* The recommendations algorithm does not account for members having a preference of one location
-over another, where such information has been provided in the biography.  It's not possible for the
-application to interpret the biography and understand the members intention when naming more than one location
-and expressing a preference.  This is the kind of data we would want our FE client to collect in a more
-meaningful way, preferably using some shared values our BE application understands.
-
-* Therefore, our member Daisy's recommendations include a job in her current location despite her looking to relocate.
-
 * A note on testing - ideally we should unit test our functions using pytest or a similar testing tool.  Unit tests would
 help us iterate towards a more comprehensive and performative solution. 
